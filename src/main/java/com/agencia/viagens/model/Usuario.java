@@ -5,18 +5,9 @@ import jakarta.persistence.*;
 /**
  * Entidade JPA que representa um usuário do sistema.
  *
- * Esta entidade é usada pelo Spring Security para autenticação:
+ * Usada pelo Spring Security para autenticação:
  * o UsuarioDetailsService busca o usuário pelo username e
  * o Spring Security compara a senha fornecida com o hash BCrypt.
- *
- * O Hibernate cria automaticamente a tabela 'usuarios':
- * CREATE TABLE usuarios (
- *   id       BIGSERIAL PRIMARY KEY,
- *   username VARCHAR UNIQUE NOT NULL,
- *   senha    VARCHAR NOT NULL,
- *   role     VARCHAR NOT NULL,
- *   ativo    BOOLEAN NOT NULL DEFAULT TRUE
- * )
  *
  * Perfis de acesso (roles):
  * - ROLE_ADMIN: cadastrar, editar, avaliar e excluir destinos
@@ -26,17 +17,43 @@ import jakarta.persistence.*;
 @Table(name = "usuarios")
 public class Usuario {
 
-    /**
-     * Chave primária gerada automaticamente pelo banco.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * Nome de usuário único — usado para login.
-     * unique = true cria um índice UNIQUE no banco,
-     * garantindo que não existam dois usuários com o mesmo username.
-     */
     @Column(name = "username", nullable = false, unique = true)
     private String username;
+
+    @Column(name = "senha", nullable = false)
+    private String senha;
+
+    @Column(name = "role", nullable = false)
+    private String role;
+
+    @Column(name = "ativo", nullable = false)
+    private Boolean ativo = true;
+
+    public Usuario() {}
+
+    public Usuario(String username, String senha, String role) {
+        this.username = username;
+        this.senha    = senha;
+        this.role     = role;
+        this.ativo    = true;
+    }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+
+    public String getSenha() { return senha; }
+    public void setSenha(String senha) { this.senha = senha; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+
+    public Boolean getAtivo() { return ativo; }
+    public void setAtivo(Boolean ativo) { this.ativo = ativo; }
+}
